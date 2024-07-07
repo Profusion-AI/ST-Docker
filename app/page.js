@@ -1,18 +1,25 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   useEffect(() => {
-    // Smooth scrolling for navigation
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-          behavior: 'smooth'
+    const handleSmoothScroll = () => {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+          }
         });
       });
-    });
+    };
+  
+    handleSmoothScroll();
 
     // Dark mode toggle
     const darkModeToggle = document.createElement('button');
@@ -317,10 +324,10 @@ export default function Home() {
           <div className="logo">StoryTaxi</div>
           <nav>
             <ul>
-              <li><Link href="#home"><a>Home</a></Link></li>
-              <li><Link href="#stories"><a>Stories</a></Link></li>
-              <li><Link href="#about"><a>About</a></Link></li>
-              <li><Link href="#contact"><a>Contact</a></Link></li>
+              <li><Link href="#home">Home</Link></li>
+              <li><Link href="#stories">Stories</Link></li>
+              <li><Link href="#about">About</Link></li>
+              <li><Link href="#contact">Contact</Link></li>
             </ul>
           </nav>
           <div className="mobile-menu">☰</div>
@@ -368,7 +375,7 @@ export default function Home() {
 
       <footer id="contact">
         <div className="container">
-          <p>&copy; 2023 StoryTaxi. All rights reserved. | Powered by AI | Your Journey, Your Story</p>
+          <p>© 2023 StoryTaxi. All rights reserved. | Powered by AI | Your Journey, Your Story</p>
         </div>
       </footer>
     </div>
