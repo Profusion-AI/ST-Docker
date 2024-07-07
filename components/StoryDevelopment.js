@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Tracey from './Tracey';
 
-const StoryDevelopment = ({ initialStoryData, threadId, assistantId }) => {
-  const [storyContent, setStoryContent] = useState('');
+const StoryDevelopment = ({ storyId }) => {
+  const [storyContent, setStoryContent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,7 +14,7 @@ const StoryDevelopment = ({ initialStoryData, threadId, assistantId }) => {
         const response = await fetch('/api/story/initialize', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ storyId: 'your-story-id' }),
+          body: JSON.stringify({ storyId }),
         });
 
         if (!response.ok) throw new Error('Failed to initialize story');
@@ -38,12 +38,11 @@ const StoryDevelopment = ({ initialStoryData, threadId, assistantId }) => {
     };
 
     fetchStoryContent();
-  }, []);
+  }, [storyId]);
 
   const parseStoryContent = (content) => {
     // Implement your parsing logic here
-    // This should handle partial content as it streams in
-    // You might need to adjust this based on how the content is structured
+    // This is a placeholder implementation
     const lines = content.split('\n');
     const title = lines.find(line => line.startsWith('**Title:'))?.replace('**Title:', '').trim() || '';
     const traceyMessage = lines.find(line => line.startsWith('Tracey:'))?.replace('Tracey:', '').trim() || '';
@@ -55,19 +54,24 @@ const StoryDevelopment = ({ initialStoryData, threadId, assistantId }) => {
     return { title, traceyMessage, storyText, choices };
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (isLoading) return <div className="container py-8 text-center">Loading your adventure...</div>;
+  if (error) return <div className="container py-8 text-center text-red-500">{error}</div>;
+  if (!storyContent) return null;
 
   return (
-    <div>
-      <h1>{storyContent.title}</h1>
+    <div className="container py-8">
+      <h1 className="text-4xl font-bold mb-6 text-center">{storyContent.title}</h1>
       <Tracey message={storyContent.traceyMessage} />
-      <p>{storyContent.storyText}</p>
-      {storyContent.choices.map((choice, index) => (
-        <button key={index} onClick={() => handleChoice(choice)}>
-          {choice.text}
-        </button>
-      ))}
+      <div className="card mb-8">
+        <p className="text-lg leading-relaxed">{storyContent.storyText}</p>
+      </div>
+      <div className="grid gap-4 md:grid-cols-3">
+        {storyContent.choices.map((choice, index) => (
+          <button key={index} className="btn btn-primary" onClick={() => handleChoice(choice)}>
+            {choice.text}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

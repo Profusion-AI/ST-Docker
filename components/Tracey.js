@@ -1,12 +1,8 @@
-'use client';
-
-import React from 'react';
-
 const Tracey = ({ message }) => {
   return (
-    <div className="bg-gray-200 p-4 rounded-lg mb-4">
-      <p className="font-bold mb-2">Tracey:</p>
-      <p>{message}</p>
+    <div className="bg-blue-900 p-4 rounded-lg mb-6 border border-blue-700">
+      <p className="font-bold mb-2 text-blue-300">Tracey:</p>
+      <p className="italic text-lg">{message}</p>
     </div>
   );
 };
